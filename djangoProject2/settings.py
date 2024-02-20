@@ -56,7 +56,9 @@ ROOT_URLCONF = 'djangoProject2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [
+            BASE_DIR.joinpath('templates')
+        ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -126,3 +128,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'authentification.User'
+
+LOGIN_URL = 'login'

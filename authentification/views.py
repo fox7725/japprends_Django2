@@ -1,14 +1,34 @@
 from django.shortcuts import render
-
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.views.generic import View
+from django.shortcuts import render, redirect
 
 from . import forms
 
 
-def login_page(request):
-    form = forms.LoginForm()
-    if request.method == 'POST':
-        form = forms.LoginForm(request.POST)
+class LoginPageView(View):
+    template_name = 'authentification/login.html'
+    form_class = forms.LoginForm
+
+    def get(self, request):
+        form = self.form_class()
+        message = ''
+        return render(request, self.template_name, context={'form': form, 'message': message})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
-            pass
-    return render(request, 'authentication/login.html', context={'form': form})
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+        message = 'Identifiants invalides.'
+        return render(request, self.template_name, context={'form': form, 'message': message})
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
