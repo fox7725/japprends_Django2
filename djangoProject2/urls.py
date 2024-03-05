@@ -21,6 +21,9 @@ from django.urls import path
 import authentification.views
 import blog.views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LoginView.as_view(
@@ -29,5 +32,9 @@ urlpatterns = [
     ), name='login'),
     path('logout/', authentification.views.logout_user, name='logout'),
     path('signup', authentification.views.signup_page, name='signup'),
-    path('home/', blog.views.home, name='home')
+    path('home/', blog.views.home, name='home'),
+    path('photo/upload/', blog.views.photo_upload, name='photo_upload')
 ]
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
